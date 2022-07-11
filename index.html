@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Raul's Carpet Service</title>
+<style>
+    body {
+        text-align: center;
+        font-family: Cambria, serif;
+        color: rgb(60, 50, 55);
+        background-image: url("rug1.png");
+        background-position: center;
+        background-repeat: no-repeat;
+        padding-top: 1.5em;
+    }
+    h3, p {
+        color: rgb(86, 71, 71);
+    }
+    #map {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .carouse-wrapper {
+    max-height: 300px;
+    }
+    .carousel {
+    height: 300px;
+    margin: 0 auto;
+    position: relative;
+    max-width: 400px;
+    border: 3px solid gainsboro;
+    }
+    .carousel__image {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+    }
+    .carousel__track-container {
+    background-color: gray;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    }
+    .carousel__track {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    height: 100%;
+    transition: transform 400ms ease;
+    }
+    .carousel__slide {
+    bottom: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    }
+    .carousel__button {
+  cursor: pointer;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.75);
+  border: unset;
+  padding: 0;
+  z-index: 100;
+  border-radius: 50%;
+  padding: 7px;
+  outline: none;
+}
+.carousel__button--right {
+  right: 10px;
+}
+.carousel__button--left {
+  left: 10px;
+}
+.carousel__button img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+.carousel__nav {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+.carousel__indicator {
+  border: unset;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 10px;
+  height: 10px;
+  background-color: rgb(182, 182, 182, 0.7);
+  padding: 0;
+  margin: 0 5px;
+  outline: none;
+}
+.carousel__indicator.current-slide {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+</style>
+<!--https://webcodeflow.com/infinite-image-carousel/-->
+</head>
+
+<body>
+    <div id="header">
+    <h1>~ Raul's Carpet ~</h1>
+    <h4>Bothell, WA</h4>
+    <h3>Quality Carpets and Hardwood Flooring<br />Professional Installation and Repair</h3>
+    <h3><a href="tel:206-755-9337">(206) 755-9337</a> ~ <a href="mailto:email@example.com">Send us a message</a></h3>
+    </div>
+
+    <div class="carousel-wrapper">
+        <div class="carousel">
+          <button id="carouselPreviousSlideButton" class="carousel__button carousel__button--left">
+            &#10092;
+          </button>
+          <div class="carousel__track-container">
+            <ul id="track" class="carousel__track">
+              <li class="carousel__slide current-slide">
+                <img src="slide1.jpg">
+              </li>
+              <li class="carousel__slide">
+                <img src="slide2.jpg">
+              </li>
+              <li class="carousel__slide">
+                <img src="slide3.jpg">
+              </li>
+            </ul>
+          </div>
+          <button id="carouselNextSlideButton" class="carousel__button carousel__button--right">
+            &#10093;
+          </button>
+          <div id="carouselNav" class="carousel__nav">
+            <button class="carousel__indicator current-slide"></button>
+            <button class="carousel__indicator"></button>
+            <button class="carousel__indicator"></button>
+          </div>
+        </div>
+    </div>
+
+    <div>
+    <h2>Come visit our showroom:</h2>
+    <p>8523 NE 198th St<br />Bothell, WA 98011</p>
+    <div id="map">
+        <div class="mapouter"><div class="gmap_canvas"><iframe width="400" height="200" id="gmap_canvas" src="https://maps.google.com/maps?q=8523%20NE%20198th%20St%20Bothell,%20WA%2098011&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><br><style>.mapouter{height:200px;width:400px;}</style><style>.gmap_canvas {overflow:hidden;background:none!important;height:200px;width:400px;}</style></div></div>
+    </div>
+    </div>
+    <script>
+        const track = document.getElementById('track'),
+      slides = Array.from(track.children),
+      nextSlideButton = document.getElementById('carouselNextSlideButton'),
+      previousSlideButton = document.getElementById('carouselPreviousSlideButton'),
+      carouselNav = document.getElementById('carouselNav'),
+      carouselNavDots = Array.from(carouselNav.children);
+    window.addEventListener('resize', setSlideImagePosition)
+    //  position slide images parallel to one another horizontally
+    function setSlideImagePosition() {
+      slideXDimension = slides[0].getBoundingClientRect().width;
+      for (let index = 0; index < slides.length; index++) { 
+        slides[index].style.left = `${index * slideXDimension}px`
+      }
+      const currentSlide = track.querySelector('.current-slide');
+      track.style.transform = `translateX(-${currentSlide.style.left})`
+    }
+    setSlideImagePosition();
+    //  current slide is moved to the left when next button is clicked 
+    function moveSlide(track, currentSlide, targetSlide) { 
+      track.style.transform = `translateX(-${targetSlide.style.left})`;
+      currentSlide.classList.remove('current-slide');
+      targetSlide.classList.add('current-slide');
+    }
+    nextSlideButton.addEventListener('click', function () { 
+      const currentSlide = track.querySelector('.current-slide');
+      const targetSlide = currentSlide.nextElementSibling;
+      const currentDot = carouselNav.querySelector('.current-slide');
+      const nextDot = currentDot.nextElementSibling;
+      if (targetSlide) {
+        moveSlide(track, currentSlide, targetSlide)
+        updateCarouselDots(currentDot, nextDot)
+      } else { 
+        const targetSlide = slides[0];
+        const nextDot = carouselNavDots[0]
+        moveSlide(track, currentSlide, targetSlide)
+        updateCarouselDots(currentDot, nextDot)
+      }
+    })
+    previousSlideButton.addEventListener('click', function () { 
+      const currentSlide = track.querySelector('.current-slide');
+      const targetSlide = currentSlide.previousElementSibling;
+      const currentDot = carouselNav.querySelector('.current-slide');
+      const nextDot = currentDot.previousElementSibling;
+      if (targetSlide) {
+        moveSlide(track, currentSlide, targetSlide)
+        updateCarouselDots(currentDot, nextDot)
+      } else { 
+        const targetSlide = slides[slides.length - 1];
+        const nextDot = carouselNavDots[carouselNavDots.length - 1]
+        moveSlide(track, currentSlide, targetSlide)
+        updateCarouselDots(currentDot, nextDot)
+      }
+    })
+    carouselNav.addEventListener('click', function (event) { 
+      targetDot = event.target.closest('button');
+      console.log(targetDot)
+      if (!targetDot) { 
+        return
+      }
+      const currentSlide = track.querySelector('.current-slide'),
+            currentDot = carouselNav.querySelector('.current-slide'),
+            targetIndex = carouselNavDots.findIndex(dot => dot === targetDot),
+            targetSlide = slides[targetIndex];
+      moveSlide(track, currentSlide, targetSlide);
+      updateCarouselDots(currentDot, targetDot);
+    })
+    function updateCarouselDots(currentDot, targetDot) { 
+      currentDot.classList.remove('current-slide');
+      targetDot.classList.add('current-slide');
+    } 
+    slides.forEach(setSlideImagePosition)
+    </script>
+</body>
+</html>
